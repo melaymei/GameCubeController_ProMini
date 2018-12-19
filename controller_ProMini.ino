@@ -9,7 +9,7 @@ Gamecube_Data_t d = defaultGamecubeData;   //要发送到主机的数据的结�
 CGamecubeController GamecubeController1(7);
 
 //定义数据按键的针脚 
-const int A = 0;//定义常量针脚
+const int A = 0;
 const int B = 1;
 const int X = 2;
 const int Y = 4;
@@ -22,8 +22,7 @@ const int DDOWN = 14;
 const int DLEFT = 15;
 const int DRIGHT = 16;
 
-//This is the value of analog shielding 74 is lightest possible on gamecube.  it varies from gamecube to dolphin no idea why..right left是模拟数据，目前不明
-//if this does not work on your system or something like that keep raising it by 1 until it works.如果不工作74加1尝试
+//right left扳机模拟中心值，不接按键，如果不工作74加1尝试，本程序不发送扳机模拟数据
 const int RLIGHTv = 74;
 const int RLIGHT = 36; //doesnt exist
 
@@ -35,14 +34,9 @@ int Y2 = A3;//右摇杆Y
 //int LEFT = A3;//左扳机
 //int RIGHT = A3;//右扳机
 
-//int CLEFT = 14;//-
-//int CRIGHT = 15;//-
-//int CUP = 16;//-
-//int CDOWN = 17;//-
-
 void setup()
 {
-  //输入引脚默认为上拉，当同地连接时确认按键动作
+  //输入引脚默认为上拉，当同地连接时确认按键动作，一共12个按键
   pinMode(A, INPUT_PULLUP);
   pinMode(B, INPUT_PULLUP);
   pinMode(X, INPUT_PULLUP);
@@ -52,22 +46,12 @@ void setup()
   
   pinMode(R, INPUT_PULLUP);
   pinMode(L, INPUT_PULLUP);
-  pinMode(RLIGHT, INPUT_PULLUP);
+  pinMode(RLIGHT, INPUT_PULLUP);//左右扳机中心值
 
-//  pinMode(LEFT, INPUT_PULLUP);
-//  pinMode(RIGHT, INPUT_PULLUP);
-//  pinMode(UP, INPUT_PULLUP);
-//  pinMode(DOWN, INPUT_PULLUP);
-  
-//  pinMode(X1, INPUT_PULLUP);
-//  pinMode(X2, INPUT_PULLUP);
-//  pinMode(Y1, INPUT_PULLUP);
-//  pinMode(Y2, INPUT_PULLUP);
-  
-//  pinMode(CLEFT, INPUT_PULLUP);
-//  pinMode(CRIGHT, INPUT_PULLUP);
-//  pinMode(CUP, INPUT_PULLUP);
-//  pinMode(CDOWN, INPUT_PULLUP);
+  pinMode(DUP, INPUT_PULLUP);
+  pinMode(DDOWN, INPUT_PULLUP);
+  pinMode(DLEFT, INPUT_PULLUP);
+  pinMode(DRIGHT, INPUT_PULLUP);
 
   //This is needed to run the code.
   GamecubeController1.read();
@@ -82,11 +66,9 @@ void loop()
   int pinY = 0;
   int pinZ = 0;
   int pinSTART = 0;
-
   int pinR = 0;
   int pinL = 0;
   int pinRLIGHT = 0;
-  
   int pinDUP = 0;
   int pinDDOWN = 0;
   int pinDLEFT = 0;
