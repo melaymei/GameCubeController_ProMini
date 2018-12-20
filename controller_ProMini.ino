@@ -31,12 +31,12 @@ int X1 = A0;//左摇杆X
 int Y1 = A1;//左摇杆Y
 int X2 = A2;//右摇杆X
 int Y2 = A3;//右摇杆Y
-//int LEFT = A3;//左扳机
-//int RIGHT = A3;//右扳机
+//int LEFT = A3;//左扳机未启用
+//int RIGHT = A3;//右扳机未启用
 
 void setup()
 {
-  //输入引脚默认为上拉，当同地连接时确认按键动作，一共12个按键
+  //输入引脚默认为上拉，当同地连接时确认按键动作，一共12个数字按键
   pinMode(A, INPUT_PULLUP);
   pinMode(B, INPUT_PULLUP);
   pinMode(X, INPUT_PULLUP);
@@ -46,7 +46,7 @@ void setup()
   
   pinMode(R, INPUT_PULLUP);
   pinMode(L, INPUT_PULLUP);
-  pinMode(RLIGHT, INPUT_PULLUP);//左右扳机中心值
+  pinMode(RLIGHT, INPUT_PULLUP);//左右扳机中心值 仅用于不启用扳机模拟
 
   pinMode(DUP, INPUT_PULLUP);
   pinMode(DDOWN, INPUT_PULLUP);
@@ -96,18 +96,12 @@ void loop()
 //  int xmod = 0;
 //  int pinyAxis = 128;
    
-  if (analogRead(X1))pinxAxis = 255; //左摇杆X轴
-  if (digitalRead(Y1))pinxAxis = 0; //左摇杆Y轴
-  if (digitalRead(X2))pinyAxisC = 255; //右摇杆X轴
-  if (digitalRead(Y2))pinyAxisC = 4; //右摇杆Y轴
+  pinxAxis = analogRead(X1)/4; //左摇杆X轴 将读取到的模拟0-1024转化为0-256
+  pinxAyis = digitalRead(Y1)/4; //左摇杆Y轴
+  pinyAxisC = digitalRead(X2)/4; //右摇杆X轴
+  pinyAyisC = digitalRead(Y2)/4; //右摇杆Y轴
   
-  //Reads CStick pins, same logic as controlstick values.
-//  if (digitalRead(CLEFT) == HIGH && digitalRead(CRIGHT) == LOW)pinxAxisC = 255;
-//  if (digitalRead(CLEFT) == LOW && digitalRead(CRIGHT) == HIGH)pinyAxisC = 0;
-//  if (digitalRead(CDOWN) == HIGH && digitalRead(CUP) == LOW)pinxAxisC = 255;
-//  if (digitalRead(CDOWN) == LOW && digitalRead(CUP) == HIGH)pinyAxisC = 0;
-
-  if (digitalRead(A) == LOW)pinA = 1;
+  if (digitalRead(A) == LOW)pinA = 1;//反馈数字信号数据0/1
   if (digitalRead(B) == LOW)pinB = 1;
   if (digitalRead(X) == LOW)pinX = 1;
   if (digitalRead(Y) == LOW)pinY = 1;
@@ -122,7 +116,7 @@ void loop()
   if (digitalRead(DRIGHT) == LOW)pinDRIGHT = 1;
 
 
-  //reports data
+  //发送到主机
   d.report.a = pinA;
   d.report.b = pinB;
   d.report.x = pinX;
@@ -137,9 +131,9 @@ void loop()
   d.report.dleft = pinDLEFT;
   d.report.dright = pinDRIGHT;
   d.report.xAxis = pinxAxis;
-  d.report.yAxis = pinyAxis;
+  d.report.yAxis = pinyAyis;
   d.report.cxAxis = pinxAxisC;
-  d.report.cyAxis = pinyAxisC;
+  d.report.cyAxis = pinyAyisC;
   //sends the complied data to console when console polls for the input
   GamecubeConsole.write(d);
 
